@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matt's Bitly Clone</title>
+    <script>
+      function handleSubmit() {
+        const fullUrl = document.getElementById("url").value;
+
+        const shortUrl = "placeholder " + Math.round(Math.random() * 100);
+        console.log(shortUrl);
+        document.getElementById("shortUrl").innerHTML = shortUrl;
+      }
+
+      function copyToClipboard() {
+        const url = document.getElementById("shortUrl");
+
+        const textArea = document.createElement("textarea");
+        textArea.value = url.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        textArea.remove();
+        alert("Copied the text: " + url.textContent);
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <h1>Matt's Bitly Clone</h1>
+      <div>
+        <input type="text" id="url" placeholder="Enter/Paste a URL" />
+        <button id="shorten" onclick="handleSubmit()">Shorten</button>
+      </div>
+      <div id="result">
+        <p>Your unique shortened ULR: <span id="shortUrl">Placeholder</span></p>
+        <button onclick="copyToClipboard()">Copy to clipboard</button>
+      </div>
+    </div>
+  </body>
+</html>
