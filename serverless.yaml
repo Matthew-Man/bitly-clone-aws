@@ -1,0 +1,46 @@
+service: matt-m-project
+frameworkVersion: "2 || 3"
+custom:
+  tableName: "matt-m-url-table"
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-2
+  memorySize: 256
+  stage: prod
+  lambdaHashingVersion: "20201221"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+          Resource:
+            - Fn::GetAtt: [UrlTable, Arn]
+  environment:
+    URLS_TABLE: ${self:custom.tableName}
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - http:
+          path: /{urlId}
+          method: GET
+      - http:
+          path: /test/{urlId}
+          method: GET
+resources:
+  Resources:
+    UrlTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: urlId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: urlId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName}
